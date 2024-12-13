@@ -1,0 +1,2 @@
+# tengrific
+qazaq tilindegi fanfıkter
