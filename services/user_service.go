@@ -3,13 +3,21 @@ package services
 import (
 	"tengrific/db"
 	"tengrific/models"
+	"fmt"
+	"regexp"
+	"errors"
 )
 
 func GetAllUsers() ([]models.User, error) {
+	if db.DB == nil {
+		return nil, fmt.Errorf("database connection is not initialized")
+	}
+
 	var users []models.User
 	result := db.DB.Find(&users)
 	return users, result.Error
 }
+
 
 func GetUserByID(id uint) (*models.User, error) {
 	var user models.User
@@ -18,7 +26,14 @@ func GetUserByID(id uint) (*models.User, error) {
 }
 
 func CreateUser(user *models.User) error {
-	return db.DB.Create(user).Error
+	if !IsValidEmail(user.Email) {
+		return errors.New("Incorrect email")
+}
+return db.DB.Create(user).Error}
+
+func IsValidEmail(email string) bool {
+	re := regexp.MustCompile(`^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$`)
+	return re.MatchString(email)
 }
 
 func UpdateUser(id uint, updatedData *models.User) error {
