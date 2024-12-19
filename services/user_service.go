@@ -27,7 +27,7 @@ func GetUserByID(id uint) (*models.User, error) {
 
 func CreateUser(user *models.User) error {
 	if !IsValidEmail(user.Email) {
-		return errors.New("Incorrect email")
+		return errors.New("Invalid email")
 }
 return db.DB.Create(user).Error}
 
